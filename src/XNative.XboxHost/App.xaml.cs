@@ -1,0 +1,70 @@
+using System;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Activation;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+using XNative.XboxHost.Bootstrap;
+using XNative.XboxHost.Views;
+
+namespace XNative.XboxHost
+{
+    /// <summary>
+    /// Application head of X-Native for Xbox Developer Mode.
+    /// </summary>
+    public sealed partial class App : Application
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="App"/> class.
+        /// </summary>
+        public App()
+        {
+            InitializeComponent();
+            Suspending += OnSuspending;
+        }
+
+        /// <summary>
+        /// The result of the startup sequence, consumed by the first page.
+        /// </summary>
+        public static StartupReport? Startup { get; private set; }
+
+        /// <inheritdoc />
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+
+            Startup ??= Bootstrapper.Start();
+
+            if (!(Window.Current.Content is Frame rootFrame))
+            {
+                rootFrame = new Frame();
+                rootFrame.NavigationFailed += OnNavigationFailed;
+                Window.Current.Content = rootFrame;
+            }
+
+            if (!e.PrelaunchActivated && rootFrame.Content == null)
+            {
+                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+            }
+
+            Window.Current.Activate();
+        }
+
+        private static void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        {
+            throw new InvalidOperationException("Failed to load page " + e.SourcePageType.FullName + ".");
+        }
+
+        private static void OnSuspending(object sender, SuspendingEventArgs e)
+        {
+            SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
+            deferral.Complete();
+        }
+    }
+}

@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>XNative.Core</RootNamespace>
+    <AssemblyName>XNative.Core</AssemblyName>
+    <Description>Platform independent domain model and abstractions for X-Native. This project must not reference any other X-Native project or any NuGet package.</Description>
+  </PropertyGroup>
+
+</Project>

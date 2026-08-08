@@ -1,0 +1,46 @@
+## Build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+artifacts/
+
+## Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+!packages/build/
+
+## Test results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+coverage*.json
+coverage*.xml
+
+## OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+## Third party payloads (sources are vendored, binaries are not)
+third_party/**/bin/
+third_party/**/dist/
+
+## UWP host
+AppPackages/
+BundleArtifacts/
+*.appx
+*.msix
+*.appxbundle
+*.msixbundle
+*.pfx

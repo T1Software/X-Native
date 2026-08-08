@@ -1,75 +1,215 @@
 # X-Native
 
-X-Native is an Xbox Dev Mode focused compatibility platform. The long term goal
-is a modular environment able to manage and launch PC style applications on
-Xbox, designed around the constraints of UWP.
+> **Run PC games on Xbox Dev Mode.**
+>
+> An open-source compatibility layer and launcher that aims to bring Steam, Epic Games, and other Windows PC games to Xbox consoles running Developer Mode.
 
-This repository currently contains the project skeleton only. No compatibility
-layer, no graphics translation and no launching logic is implemented yet.
+> **Status:** 🚧 Early Development
 
-## Repository layout
+---
 
-```
-X-Native/
-  .github/       repository automation
-  assets/        icons, images and other static content
-  docs/          architecture and design documents
-  src/           application and library projects
-  tests/         test projects
-  tools/         development and build helper scripts
-  third_party/   vendored external sources
-```
+# What is X-Native?
 
-## Projects
+X-Native is an experimental compatibility platform designed to make running Windows PC games on **Xbox Dev Mode (UWP)** possible.
 
-| Project | Target | References | Responsibility |
-| --- | --- | --- | --- |
-| `XNative.Core` | netstandard2.0 | none | Domain model and abstractions. Platform independent and dependency free. |
-| `XNative.Platform` | netstandard2.0 | Core | Implementations of the core abstractions for the running platform. |
-| `XNative.Graphics` | netstandard2.0 | Core | Graphics backend module boundary. |
-| `XNative.Wine` | netstandard2.0 | Core | Compatibility layer module boundary. |
-| `XNative.Plugins` | netstandard2.0 | Core | Plugin contracts and discovery boundary. |
-| `XNative.UI` | netstandard2.0 | Core | View framework agnostic MVVM primitives. |
-| `XNative.App` | net8.0 | all of the above | Composition root and development host. |
-| `XNative.XboxHost` | UAP 10.0.19041.0 | all modules | UWP application head for Xbox Developer Mode. |
-| `XNative.Core.Tests` | net8.0 | Core | Tests for the core. |
-| `XNative.Platform.Tests` | net8.0 | Platform | Tests for the platform module. |
-| `XNative.UI.Tests` | net8.0 | UI | Tests for the view models. |
+Rather than emulating a PC, X-Native aims to provide a compatibility environment that allows supported games to run through native translation layers and platform abstractions.
 
-The libraries target `netstandard2.0` because that is the surface a UWP
-application can consume. A UWP application head will be added later as a
-separate project without any change to the libraries.
+The project is inspired by the philosophy behind projects like Wine, Proton, DXVK, and Box86/64—but is built specifically for Xbox Developer Mode.
 
-## Build
+---
 
-```
-dotnet build X-Native.sln
-dotnet test X-Native.sln
-dotnet run --project src/XNative.App
-```
+# Vision
 
-Running the development host prints the modules resolved from the dependency
-injection container, which verifies that the composition root is wired
-correctly.
+Imagine launching:
 
-`XNative.XboxHost` is a legacy UWP project, which the .NET SDK cannot evaluate.
-It is intentionally excluded from the `Any CPU` solution configuration so that
-`dotnet build` and `dotnet test` keep working. Build it with MSBuild:
+- 🎮 Steam Games
+- 🎮 Epic Games Store Games
+- 🎮 DRM-Free Windows Games
+- 🎮 Fan Games
+- 🎮 Indie Titles
+
+...directly from an Xbox Dev Mode application.
+
+That's the long-term vision.
+
+---
+
+# Goals
+
+- Native UWP launcher
+- Windows API compatibility layer
+- Graphics abstraction
+- Input translation
+- Audio translation
+- File system virtualization
+- Plugin architecture
+- Game profiles
+- Performance-focused design
+- Open-source from day one
+
+---
+
+# Planned Architecture
 
 ```
-msbuild src\XNative.XboxHost\XNative.XboxHost.csproj /t:Restore /p:Platform=x64
-msbuild src\XNative.XboxHost\XNative.XboxHost.csproj /p:Configuration=Debug /p:Platform=x64
+                 Xbox Dev Mode
+                       │
+                X-Native Launcher
+                       │
+        ┌──────────────┴──────────────┐
+        │                             │
+ Compatibility Layer           Plugin System
+        │                             │
+ ┌──────┴────────┐           ┌────────┴────────┐
+ │               │           │                 │
+Graphics      Audio       Community Plugins  Tools
+ │               │
+ Input      File System
+ │               │
+ └───────────────┴───────────────┐
+                                 │
+                          Windows PC Games
+
 ```
 
-The build produces a signed package under
-`src\XNative.XboxHost\AppPackages\`. See
-[docs/xbox-host.md](docs/xbox-host.md) for deployment to a console in
-Developer Mode.
+---
 
-## Contributing rules
+# Current Roadmap
 
-- `XNative.Core` must never reference another project or a NuGet package.
-- Interfaces live in `XNative.Core`, implementations live in the modules.
-- No placeholder code for features that are not being implemented yet.
+## Phase 1 — Foundation
 
-See [docs/architecture.md](docs/architecture.md) for details.
+-  Project architecture
+-  Core libraries
+-  UWP host application
+-  Logging system
+-  Configuration system
+-  Plugin framework
+
+---
+
+## Phase 2 — Compatibility Layer
+
+-  Win32 abstraction
+-  Process management
+-  Memory management
+-  Threading
+-  DLL loading
+-  File system virtualization
+
+---
+
+## Phase 3 — Graphics
+
+-  Graphics abstraction
+-  DirectX translation research
+-  Shader pipeline
+-  Texture management
+
+---
+
+## Phase 4 — Input & Audio
+
+-  Xbox controller support
+-  Keyboard & mouse abstraction
+-  Audio backend
+-  XAudio compatibility research
+
+---
+
+## Phase 5 — Game Support
+
+-  Game profiles
+-  Compatibility database
+-  Launcher UI
+-  Save management
+
+---
+
+# Current Status
+
+This project is **very early** in development.
+
+Expect:
+
+- Frequent API changes
+- Experimental code
+- Incomplete features
+- Breaking changes
+
+Nothing should currently be considered stable.
+
+---
+
+# Why Open Source?
+
+Projects like this are too large for one developer alone.
+
+By developing in the open, we hope to:
+
+- Share knowledge
+- Encourage experimentation
+- Welcome contributors
+- Build useful tools for the community
+- Preserve compatibility research
+
+---
+
+# Contributing
+
+Contributions of all sizes are welcome.
+
+You don't need to be an emulator expert to help.
+
+Ways to contribute include:
+
+- Documentation
+- Bug reports
+- Testing
+- C#
+- C++
+- UWP development
+- Graphics research
+- Reverse engineering
+- Performance optimization
+- Build systems
+- CI/CD
+- UI/UX improvements
+
+If you're new to open source, beginner-friendly issues will be labeled accordingly.
+
+---
+
+# Principles
+
+X-Native is built around a few core principles:
+
+- 🟢 Open development
+- 🟢 Clean architecture
+- 🟢 Modular design
+- 🟢 Transparency
+- 🟢 Community collaboration
+- 🟢 Long-term maintainability
+
+---
+
+# Disclaimer
+
+X-Native is an independent open-source project and is **not affiliated with or endorsed by Microsoft, Valve, Epic Games, or any game publisher**.
+
+Users are responsible for obtaining and using legally acquired copies of any games they run with X-Native.
+
+---
+
+# License
+
+This project is licensed under the **MIT License**.
+
+---
+
+# Join the Journey
+
+X-Native is an ambitious, long-term project.
+
+There are no promises about what games will work or when. Progress will happen one milestone at a time, and every improvement—no matter how small—brings the project closer to its goal.
+
+Whether you're here to contribute code, report bugs, test builds, improve documentation, or simply follow development, you're welcome. 🚀

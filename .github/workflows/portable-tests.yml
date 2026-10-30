@@ -1,0 +1,37 @@
+name: Portable build and tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Test portable projects (excludes legacy UWP host)
+        shell: pwsh
+        run: |
+          $projects = @(Get-ChildItem tests -Recurse -Filter '*.csproj')
+          if ($projects.Count -eq 0) { throw 'No test projects found.' }
+          foreach ($project in $projects) {
+            dotnet test $project.FullName --configuration Release --logger trx --results-directory "$env:GITHUB_WORKSPACE/TestResults/$($project.BaseName)"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: Build development application
+        run: dotnet build src/XNative.App/XNative.App.csproj --configuration Release
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}
+          path: TestResults/**/*.trx
+          if-no-files-found: warn

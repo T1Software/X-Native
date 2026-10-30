@@ -1,29 +1,26 @@
 using System;
+using System.IO;
 using Microsoft.Extensions.DependencyInjection;
+using Windows.Storage;
 using XNative.Core.Abstractions;
+using XNative.Platform.Games;
 
 namespace XNative.XboxHost.Services
 {
-    /// <summary>
-    /// Registration entry point of the Xbox host module. It supplies the
-    /// implementations that require the Windows Runtime.
-    /// </summary>
+    /// <summary>Registers host services that require the Windows Runtime.</summary>
     public static class XboxHostModule
     {
-        /// <summary>
-        /// Registers the host services.
-        /// </summary>
-        /// <param name="services">The service collection to populate.</param>
-        /// <returns>The same service collection, to allow chaining.</returns>
+        /// <summary>Registers Xbox services and an app-local game catalogue root.</summary>
         public static IServiceCollection AddXboxHost(this IServiceCollection services)
         {
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
-
+            if (services == null) throw new ArgumentNullException(nameof(services));
             services.AddSingleton<IModuleDescriptor, XboxHostModuleDescriptor>();
             services.AddSingleton<IDeviceInfoService, UwpDeviceInfoService>();
+            // Bootstrapper registers the platform defaults first; override those here.
+            services.Configure<LocalGameCatalogOptions>(options =>
+            {
+                options.RootPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Games");
+            });
             return services;
         }
     }

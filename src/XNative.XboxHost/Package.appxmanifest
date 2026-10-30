@@ -5,45 +5,37 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   IgnorableNamespaces="uap mp">
 
-  <Identity
-    Name="XNativeProject.XNative"
-    Publisher="CN=X-Native Project"
-    Version="0.1.0.0" />
-
+  <Identity Name="XNativeProject.XNative" Publisher="CN=X-Native Project" Version="0.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="df935faa-6bd1-4644-aa48-bcb64369757f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
-
   <Properties>
     <DisplayName>X-Native</DisplayName>
     <PublisherDisplayName>X-Native Project</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
-
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
     <TargetDeviceFamily Name="Windows.Xbox" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
   </Dependencies>
-
-  <Resources>
-    <Resource Language="en-US" />
-  </Resources>
-
+  <Resources><Resource Language="en-US" /></Resources>
   <Applications>
-    <Application Id="App"
-      Executable="$targetnametoken$.exe"
-      EntryPoint="XNative.XboxHost.App">
-      <uap:VisualElements
-        DisplayName="X-Native"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="Xbox Dev Mode compatibility platform."
-        BackgroundColor="transparent">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="XNative.XboxHost.App">
+      <uap:VisualElements DisplayName="X-Native" Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png" Description="Xbox Dev Mode compatibility platform." BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="xnative-game-archive">
+            <uap:DisplayName>X-Native game archive</uap:DisplayName>
+            <uap:SupportedFileTypes><uap:FileType>.zip</uap:FileType></uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
-
   <Capabilities>
     <Capability Name="internetClient" />
+    <uap:Capability Name="removableStorage" />
   </Capabilities>
 </Package>
